@@ -6,12 +6,12 @@ export default function _header() {
 			<div className="container-fluid">
 				<div className="nk-header-wrap">
 					<div className="nk-menu-trigger d-xl-none ms-n1">
-						<a href="#" className="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em className="icon ni ni-menu" /></a>
+						<a href="#x" className="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em className="icon ni ni-menu" /></a>
 					</div>
 					<div className="nk-header-brand d-xl-none">
 						<a href="html/index.html" className="logo-link">
-							<img className="logo-light logo-img" src="./images/logo.png" srcSet="./images/logo2x.png 2x" alt="logo" />
-							<img className="logo-dark logo-img" src="./images/logo-dark.png" srcSet="./images/logo-dark2x.png 2x" alt="logo-dark" />
+							<img className="logo-light logo-img" src="/assets/images/logo.png" srcSet="/assets/images/logo2x.png 2x" alt="logo" />
+							<img className="logo-dark logo-img" src="/assets/images/logo-dark.png" srcSet="/assets/images/logo-dark2x.png 2x" alt="logo-dark" />
 						</a>
 					</div>{/* .nk-header-brand */}
 					<div className="nk-header-search ms-3 ms-xl-0">
@@ -21,34 +21,34 @@ export default function _header() {
 					<div className="nk-header-tools">
 						<ul className="nk-quick-nav">
 							<li className="dropdown language-dropdown d-none d-sm-block me-n1">
-								<a href="#" className="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
+								<a href="#x" className="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
 									<div className="quick-icon border border-light">
-										<img className="icon" src="./images/flags/english-sq.png" alt />
+										<img className="icon" src="/assets/images/flags/english-sq.png" alt="" />
 									</div>
 								</a>
 								<div className="dropdown-menu dropdown-menu-end dropdown-menu-s1">
 									<ul className="language-list">
 										<li>
-											<a href="#" className="language-item">
-												<img src="./images/flags/english.png" alt className="language-flag" />
+											<a href="#x" className="language-item">
+												<img src="/assets/images/flags/english.png" alt="" className="language-flag" />
 												<span className="language-name">English</span>
 											</a>
 										</li>
 										<li>
-											<a href="#" className="language-item">
-												<img src="./images/flags/spanish.png" alt className="language-flag" />
+											<a href="#x" className="language-item">
+												<img src="/assets/images/flags/spanish.png" alt="" className="language-flag" />
 												<span className="language-name">Español</span>
 											</a>
 										</li>
 										<li>
-											<a href="#" className="language-item">
-												<img src="./images/flags/french.png" alt className="language-flag" />
+											<a href="#x" className="language-item">
+												<img src="/assets/images/flags/french.png" alt="" className="language-flag" />
 												<span className="language-name">Français</span>
 											</a>
 										</li>
 										<li>
-											<a href="#" className="language-item">
-												<img src="./images/flags/turkey.png" alt className="language-flag" />
+											<a href="#x" className="language-item">
+												<img src="/assets/images/flags/turkey.png" alt="" className="language-flag" />
 												<span className="language-name">Türkçe</span>
 											</a>
 										</li>
@@ -56,13 +56,13 @@ export default function _header() {
 								</div>
 							</li>{/* .dropdown */}
 							<li className="dropdown chats-dropdown hide-mb-xs">
-								<a href="#" className="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
+								<a href="#x" className="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
 									<div className="icon-status icon-status-na"><em className="icon ni ni-comments" /></div>
 								</a>
 								<div className="dropdown-menu dropdown-menu-xl dropdown-menu-end">
 									<div className="dropdown-head">
 										<span className="sub-title nk-dropdown-title">Recent Chats</span>
-										<a href="#">Setting</a>
+										<a href="#x">Setting</a>
 									</div>
 									<div className="dropdown-body">
 										<ul className="chat-list">
@@ -109,7 +109,7 @@ export default function _header() {
 											<li className="chat-item">
 												<a className="chat-link" href="html/apps-chats.html">
 													<div className="chat-media user-avatar">
-														<img src="./images/avatar/b-sm.jpg" alt />
+														<img src="/assets/images/avatar/b-sm.jpg" alt="" />
 													</div>
 													<div className="chat-info">
 														<div className="chat-from">
@@ -126,7 +126,7 @@ export default function _header() {
 												<a className="chat-link" href="html/apps-chats.html">
 													<div className="chat-media user-avatar user-avatar-multiple">
 														<div className="user-avatar">
-															<img src="./images/avatar/c-sm.jpg" alt />
+															<img src="/assets/images/avatar/c-sm.jpg" alt="" />
 														</div>
 														<div className="user-avatar">
 															<span>AB</span>
@@ -149,7 +149,7 @@ export default function _header() {
 											<li className="chat-item">
 												<a className="chat-link" href="html/apps-chats.html">
 													<div className="chat-media user-avatar">
-														<img src="./images/avatar/a-sm.jpg" alt />
+														<img src="/assets/images/avatar/a-sm.jpg" alt="" />
 														<span className="status dot dot-lg dot-success" />
 													</div>
 													<div className="chat-info">
@@ -190,13 +190,13 @@ export default function _header() {
 								</div>
 							</li>
 							<li className="dropdown notification-dropdown">
-								<a href="#" className="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
+								<a href="#x" className="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
 									<div className="icon-status icon-status-info"><em className="icon ni ni-bell" /></div>
 								</a>
 								<div className="dropdown-menu dropdown-menu-xl dropdown-menu-end">
 									<div className="dropdown-head">
 										<span className="sub-title nk-dropdown-title">Notifications</span>
-										<a href="#">Mark All as Read</a>
+										<a href="#x">Mark All as Read</a>
 									</div>
 									<div className="dropdown-body">
 										<div className="nk-notification">
@@ -257,12 +257,12 @@ export default function _header() {
 										</div>{/* .nk-notification */}
 									</div>{/* .nk-dropdown-body */}
 									<div className="dropdown-foot center">
-										<a href="#">View All</a>
+										<a href="#x">View All</a>
 									</div>
 								</div>
 							</li>
 							<li className="dropdown user-dropdown">
-								<a href="#" className="dropdown-toggle me-n1" data-bs-toggle="dropdown">
+								<a href="#x" className="dropdown-toggle me-n1" data-bs-toggle="dropdown">
 									<div className="user-toggle">
 										<div className="user-avatar sm">
 											<em className="icon ni ni-user-alt" />
@@ -290,12 +290,12 @@ export default function _header() {
 											<li><a href="html/user-profile-regular.html"><em className="icon ni ni-user-alt" /><span>View Profile</span></a></li>
 											<li><a href="html/user-profile-setting.html"><em className="icon ni ni-setting-alt" /><span>Account Setting</span></a></li>
 											<li><a href="html/user-profile-activity.html"><em className="icon ni ni-activity-alt" /><span>Login Activity</span></a></li>
-											<li><a className="dark-switch" href="#"><em className="icon ni ni-moon" /><span>Dark Mode</span></a></li>
+											<li><a className="dark-switch" href="#x"><em className="icon ni ni-moon" /><span>Dark Mode</span></a></li>
 										</ul>
 									</div>
 									<div className="dropdown-inner">
 										<ul className="link-list">
-											<li><a href="#"><em className="icon ni ni-signout" /><span>Sign out</span></a></li>
+											<li><a href="#x"><em className="icon ni ni-signout" /><span>Sign out</span></a></li>
 										</ul>
 									</div>
 								</div>
