@@ -1,5 +1,8 @@
 // Partial Sidebar for Dashboar
 
+import { NavLink } from "react-router-dom";
+import _route from "../../constant/routes";
+
 export default function _sidebar() {
 	return (
 		<div className="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
@@ -25,39 +28,39 @@ export default function _sidebar() {
 				<div className="nk-sidebar-content">
 					<div className="nk-sidebar-menu" data-simplebar>
 						<ul className="nk-menu">
-							<li className="nk-menu-heading">
+							{/* <li className="nk-menu-heading">
 								<h6 className="overline-title text-primary-alt">Dashboards</h6>
-							</li>
+							</li> */}
 							{/* .nk-menu-item */}
 							<li className="nk-menu-item">
-								<a href="html/index.html" className="nk-menu-link">
+								<NavLink to={_route._admin_dashboard} className={(isActive) => "nk-menu-link " + (isActive.isActive && " active-nav" )}>
 									<span className="nk-menu-icon">
 										<em className="icon ni ni-dashboard" />
 									</span>
-									<span className="nk-menu-text">Overview</span>
-								</a>
+									<span className="nk-menu-text">Dashboards</span>
+								</NavLink>
 							</li>
 							{/* .nk-menu-item */}
 							<li className="nk-menu-item">
-								<a href="html/index-sales.html" className="nk-menu-link">
+								<NavLink to={_route._admin_client} className={(isActive) => "nk-menu-link " + (isActive.isActive && " active-nav" )}>
 									<span className="nk-menu-icon">
 										<em className="icon ni ni-users"></em>
 									</span>
 									<span className="nk-menu-text">My Client</span>
-								</a>
+								</NavLink>
 							</li>
 							{/* .nk-menu-item */}
 							<li className="nk-menu-item">
-								<a href="html/index-analytics.html" className="nk-menu-link">
+								<NavLink to={_route._admin_administrator} className={(isActive) => "nk-menu-link " + (isActive.isActive && " active-nav" )}>
 									<span className="nk-menu-icon">
 										<em className="icon ni ni-user-list"></em>
 									</span>
 									<span className="nk-menu-text">Administrators</span>
-								</a>
+								</NavLink>
 							</li>
 
 							{/* .nk-menu-item */}
-							<li className="nk-menu-item has-sub">
+							{/* <li className="nk-menu-item has-sub">
 								<a href="#x" className="nk-menu-link nk-menu-toggle">
 									<span className="nk-menu-icon">
 										<em className="icon ni ni-users-fill" />
@@ -84,8 +87,7 @@ export default function _sidebar() {
 										<a href="html/user-card.html" className="nk-menu-link"><span className="nk-menu-text">User Contact - Card</span></a>
 									</li>
 								</ul>
-								{/* .nk-menu-sub */}
-							</li>
+							</li> */}
 						</ul>
 						{/* .nk-menu */}
 					</div>
