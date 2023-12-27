@@ -35,8 +35,8 @@ export default function SignIn() {
 							<div className="nk-split-content nk-block-area nk-block-area-column nk-auth-container bg-white">
 								<div className="nk-block nk-block-middle nk-auth-body">
 									<div className="brand-logo pb-5">
-										<a href="html/index.html" className="logo-link">
-											<img className="logo-light logo-img logo-img-lg" src={logoDark} alt="logo" />
+										<a href={_route._admin_dashboard} className="logo-link">
+											<img style={{'width': '8rem'}} className="logo-light logo-img logo-img-lg" src={logoDark} alt="logo" />
 											<img className="logo-dark logo-img logo-img-lg" src={logo}  alt="logo-dark" />
 										</a>
 									</div>
