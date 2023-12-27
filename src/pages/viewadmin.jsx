@@ -2,11 +2,11 @@
 import { useState } from "react";
 import ProfileDetails from '../components/admin/profiledetails'
 import { useEffect } from 'react';
-import { useNavigation, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useGetSingleAdmin from '../hooks/admin/admin/usegetsingleadmin';
 
 export default function ViewAdmin() {
-	const navigate = useNavigation()
+	const navigate = useNavigate()
     const {id} = useParams()
 	const [tabIndex, setTabIndex] = useState(0)
     const {getSingleAdmin, /*loading*/} = useGetSingleAdmin()
@@ -35,7 +35,7 @@ export default function ViewAdmin() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-
+  
 	return (
     <div className="nk-content-body">
       <div className="nk-block-head nk-block-head-sm">
