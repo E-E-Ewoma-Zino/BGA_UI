@@ -50,7 +50,7 @@
 	column-gap: 5px;
 	margin-top: 10px;
 }
-.truncate-td {
+.trunctdate- {
     max-width: 50vw; /* Set your desired max width */
     overflow: hidden;
     text-overflow: ellipsis;

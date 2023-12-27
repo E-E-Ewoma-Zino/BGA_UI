@@ -1,6 +1,20 @@
-// Partial Header for dashboard
+
+import { useSelector } from "react-redux";// Partial Header for dashboard
+import useLogOutUser from '../../hooks/admin/auth/uselogout'
+import logo from '../../assets/images/full-logo.png'
+import logoDark from '../../assets/images/full-logo-dark.png'
+import _route from "../../constants/routes";
+
 
 export default function _header() {
+	const user = useSelector((state) => state.auth.user)
+	const {logOutUser} = useLogOutUser()
+	
+
+	const handleLogOut = async ()=>{
+		await logOutUser()
+	}
+
 	return (
 		<div className="nk-header nk-header-fixed is-light">
 			<div className="container-fluid">
@@ -9,18 +23,18 @@ export default function _header() {
 						<a href="#x" className="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em className="icon ni ni-menu" /></a>
 					</div>
 					<div className="nk-header-brand d-xl-none">
-						<a href="html/index.html" className="logo-link">
-							<img className="logo-light logo-img" src="/assets/images/logo.png" srcSet="/assets/images/logo2x.png 2x" alt="logo" />
-							<img className="logo-dark logo-img" src="/assets/images/logo-dark.png" srcSet="/assets/images/logo-dark2x.png 2x" alt="logo-dark" />
+						<a href={_route._admin_dashboard} className="logo-link">
+							<img className="logo-light logo-img" src={logoDark}  alt="logo" />
+							<img className="logo-dark logo-img" src={logo}  alt="logo-dark" />
 						</a>
 					</div>{/* .nk-header-brand */}
-					<div className="nk-header-search ms-3 ms-xl-0">
+					{/* <div className="nk-header-search ms-3 ms-xl-0">
 						<em className="icon ni ni-search" />
 						<input type="text" className="form-control border-transparent form-focus-none" placeholder="Search anything" />
-					</div>{/* .nk-header-news */}
+					</div> */}
 					<div className="nk-header-tools">
 						<ul className="nk-quick-nav">
-							<li className="dropdown language-dropdown d-none d-sm-block me-n1">
+							{/* <li className="dropdown language-dropdown d-none d-sm-block me-n1">
 								<a href="#x" className="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
 									<div className="quick-icon border border-light">
 										<img className="icon" src="/assets/images/flags/english-sq.png" alt="" />
@@ -54,8 +68,8 @@ export default function _header() {
 										</li>
 									</ul>
 								</div>
-							</li>{/* .dropdown */}
-							<li className="dropdown chats-dropdown hide-mb-xs">
+							</li> */}
+							{/* <li className="dropdown chats-dropdown hide-mb-xs">
 								<a href="#x" className="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
 									<div className="icon-status icon-status-na"><em className="icon ni ni-comments" /></div>
 								</a>
@@ -85,7 +99,7 @@ export default function _header() {
 														</div>
 													</div>
 												</a>
-											</li>{/* .chat-item */}
+											</li>
 											<li className="chat-item is-unread">
 												<a className="chat-link" href="html/apps-chats.html">
 													<div className="chat-media user-avatar bg-pink">
@@ -105,7 +119,7 @@ export default function _header() {
 														</div>
 													</div>
 												</a>
-											</li>{/* .chat-item */}
+											</li>
 											<li className="chat-item">
 												<a className="chat-link" href="html/apps-chats.html">
 													<div className="chat-media user-avatar">
@@ -121,7 +135,7 @@ export default function _header() {
 														</div>
 													</div>
 												</a>
-											</li>{/* .chat-item */}
+											</li>
 											<li className="chat-item">
 												<a className="chat-link" href="html/apps-chats.html">
 													<div className="chat-media user-avatar user-avatar-multiple">
@@ -145,7 +159,7 @@ export default function _header() {
 														</div>
 													</div>
 												</a>
-											</li>{/* .chat-item */}
+											</li>
 											<li className="chat-item">
 												<a className="chat-link" href="html/apps-chats.html">
 													<div className="chat-media user-avatar">
@@ -162,7 +176,7 @@ export default function _header() {
 														</div>
 													</div>
 												</a>
-											</li>{/* .chat-item */}
+											</li>
 											<li className="chat-item">
 												<a className="chat-link" href="html/apps-chats.html">
 													<div className="chat-media user-avatar bg-purple">
@@ -181,15 +195,15 @@ export default function _header() {
 														</div>
 													</div>
 												</a>
-											</li>{/* .chat-item */}
-										</ul>{/* .chat-list */}
-									</div>{/* .nk-dropdown-body */}
+											</li>
+										</ul>
+									</div>
 									<div className="dropdown-foot center">
 										<a href="html/apps-chats.html">View All</a>
 									</div>
 								</div>
-							</li>
-							<li className="dropdown notification-dropdown">
+							</li> */}
+							{/* <li className="dropdown notification-dropdown">
 								<a href="#x" className="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
 									<div className="icon-status icon-status-info"><em className="icon ni ni-bell" /></div>
 								</a>
@@ -254,13 +268,13 @@ export default function _header() {
 													<div className="nk-notification-time">2 hrs ago</div>
 												</div>
 											</div>
-										</div>{/* .nk-notification */}
-									</div>{/* .nk-dropdown-body */}
+										</div>
+									</div>
 									<div className="dropdown-foot center">
 										<a href="#x">View All</a>
 									</div>
 								</div>
-							</li>
+							</li> */}
 							<li className="dropdown user-dropdown">
 								<a href="#x" className="dropdown-toggle me-n1" data-bs-toggle="dropdown">
 									<div className="user-toggle">
@@ -268,8 +282,8 @@ export default function _header() {
 											<em className="icon ni ni-user-alt" />
 										</div>
 										<div className="user-info d-none d-xl-block">
-											<div className="user-status user-status-unverified">Unverified</div>
-											<div className="user-name dropdown-indicator">Abu Bin Ishityak</div>
+											{/* <div className="user-status user-status-unverified">Unverified</div> */}
+											<div className="user-name dropdown-indicator">{`${user.firstname} ${user.lastname}`}</div>
 										</div>
 									</div>
 								</a>
@@ -277,25 +291,25 @@ export default function _header() {
 									<div className="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
 										<div className="user-card">
 											<div className="user-avatar">
-												<span>AB</span>
+												<span>{`${user.firstname} ${user.lastname}`.match(/\b(\w)/g).join('').toUpperCase().substring(0, 2)}</span>
 											</div>
 											<div className="user-info">
-												<span className="lead-text">Abu Bin Ishtiyak</span>
-												<span className="sub-text">info@softnio.com</span>
+												<span className="lead-text">{`${user.firstname} ${user.lastname}`}</span>
+												<span className="sub-text">{user.username}</span>
 											</div>
 										</div>
 									</div>
 									<div className="dropdown-inner">
 										<ul className="link-list">
-											<li><a href="html/user-profile-regular.html"><em className="icon ni ni-user-alt" /><span>View Profile</span></a></li>
-											<li><a href="html/user-profile-setting.html"><em className="icon ni ni-setting-alt" /><span>Account Setting</span></a></li>
-											<li><a href="html/user-profile-activity.html"><em className="icon ni ni-activity-alt" /><span>Login Activity</span></a></li>
+											{/* <li><a href="html/user-profile-regular.html"><em className="icon ni ni-user-alt" /><span>View Profile</span></a></li> */}
+											{/* <li><a href="html/user-profile-setting.html"><em className="icon ni ni-setting-alt" /><span>Account Setting</span></a></li> */}
+											{/* <li><a href="html/user-profile-activity.html"><em className="icon ni ni-activity-alt" /><span>Login Activity</span></a></li> */}
 											<li><a className="dark-switch" href="#x"><em className="icon ni ni-moon" /><span>Dark Mode</span></a></li>
 										</ul>
 									</div>
 									<div className="dropdown-inner">
 										<ul className="link-list">
-											<li><a href="#x"><em className="icon ni ni-signout" /><span>Sign out</span></a></li>
+											<li onClick={() => handleLogOut()}><a href="#x"><em className="icon ni ni-signout" /><span>Sign out</span></a></li>
 										</ul>
 									</div>
 								</div>

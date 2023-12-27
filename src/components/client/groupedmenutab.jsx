@@ -1,24 +1,39 @@
 import Modal from "../modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputNormal from '../input/inputnormal'
+import { useParams } from "react-router-dom";
+import useGetAllGroupMenu from '../../hooks/admin/groupmenu/usegetallmenu';
+import useGetAllWidget from '../../hooks/admin/widget/usegetallwidget';
+import useCreateGroupMenu from '../../hooks/admin/groupmenu/usecreategroupmenu';
+import useDeleteGroupMenu from '../../hooks/admin/groupmenu/usedeletemenu';
+import useUpdateGroupMenu from '../../hooks/admin/groupmenu/useupdatemenu';
+import Spinnar from "../spinnar";
 
 export default function GroupedMenuTab() {
 	const [showModal, setShowModal] = useState(false)
 	const [showEditModal, setShowEditModal] = useState(false)
 	const [showDeleteModal, setDeleteModal] = useState(false)
+    const {getAllGroupMenu, loading: groupMenuLoading} = useGetAllGroupMenu()
+    const {upDateGroupMenu, loading: updateGroupMenuLoading} = useUpdateGroupMenu()
+    const {getAllWidget, loading: widgetLoading} = useGetAllWidget()
+    const {createGroupMenu, loading: createGroupMenuLoading} = useCreateGroupMenu()
+    const {deleteGroupMenu, loading: deleteGroupMenuLoading} = useDeleteGroupMenu()
+    const {id} = useParams()
+    const [groupMenu, setGroupMenu] = useState([])
+    const [widgets, setWidgets] = useState([])
 	const [deleteId, setDeleteId] = useState(null)
     const [groupedMenuForm, setGroupedMenuForm] = useState({
       name: '',
       url: '',
       isActive: true,
-    //   client: id,
+      client: id,
       widget: ''
     }) 
     const [editGroupedMenuForm, setEditGroupedMenuForm] = useState({
-      name: 'Godwin',
-      url: 'Daniel',
+      name: '',
+      url: '',
       isActive: true,
-    //   client: id,
+      client: id,
       widget: ''
     })
 
@@ -27,11 +42,36 @@ export default function GroupedMenuTab() {
 		setShowEditModal(false)
 		setDeleteModal(false)
 		setDeleteId(null)
+	}
+	const fetchGroup = async ()=>{
+		handleClose()
+	  const data = await getAllGroupMenu(id)
+	  if(data !== undefined){
+		setGroupMenu(data)
+	  }
+	}  
+	const fetchWidgets = async ()=>{
+	  handleClose()
+	  const data = await getAllWidget(id)
+	  if(data !== undefined){
+		setWidgets(data)
+	  }
 	} 
 
+	// Making initial get request 
+useEffect(()=>{
 
-	const handleSubmit = ()=>{
+	// fetch()
+	fetchGroup()
+	fetchWidgets()
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+
+	const handleSubmit = async ()=>{
 		console.log(groupedMenuForm)
+		if(groupedMenuForm.url === '') delete groupedMenuForm.url;
+		await createGroupMenu(groupedMenuForm) && fetchGroup()
 	}
 
 	const handleGroupedMenuName = (e)=>{
@@ -51,8 +91,18 @@ export default function GroupedMenuTab() {
 
 	
 	
-	const handleUpdateGroupedMenu = ()=>{
+	const handleUpdateGroupedMenu = async ()=>{
 		console.log(editGroupedMenuForm)
+		const formData = {
+		  name: editGroupedMenuForm.name,
+		  url: editGroupedMenuForm.url,
+		  isActive: editGroupedMenuForm.isActive,
+		  // client: id,
+		  widget: editGroupedMenuForm.widget
+		}
+		if(formData.widget === '') delete formData.widget;
+	  
+		await upDateGroupMenu(formData, editGroupedMenuForm._id) && fetchGroup()
 	}
 	const handleEditGroupedMenuName = (e)=>{
 		setEditGroupedMenuForm(prv=> ({...prv, name: e.target.value}))
@@ -62,18 +112,18 @@ export default function GroupedMenuTab() {
 	}
 	const handleEditGroupedMenuWidget= (e)=>{
 		console.log(groupedMenuForm)
-		setEditGroupedMenuForm(prv=> ({...prv, widget: e.target.checked}))
+		setEditGroupedMenuForm(prv=> ({...prv, widget: e.target.value}))
 	}
 	const handleEditGroupedMenuAsActive = (e)=>{
 		console.log(groupedMenuForm)
 		setEditGroupedMenuForm(prv=> ({...prv, isActive: e.target.checked}))
 	}
 
-	const handleDeleteGroupedMenu = ()=>{
+	const handleDeleteGroupedMenu = async ()=>{
 		console.log(deleteId)
-		handleClose()
+		await deleteGroupMenu(deleteId, id) && fetchGroup()
 	}
-
+console.log(groupMenu)
   return (
     <>
 		<div className='py-4'>
@@ -124,29 +174,58 @@ export default function GroupedMenuTab() {
 					</tr>
 					</thead>
 					<tbody>
-						{
-							[1,2,3,4,5].map((element, index)=>{
+					{ groupMenuLoading 
+                          ?
+                          <tr>
+							<td ></td>
+							<td ></td>
+							<td >
+								<div className='w-full h-full flex justify-center items-center'><Spinnar /></div>
+							</td>
+							<td ></td>
+							<td ></td>
+						  </tr>
+                            
+                          :
+						  groupMenu.length === 0 
+                            ?
+                            (
+                              
+                              <div className='w-full h-full flex justify-center items-center'><p className='text-textgrey'>No Data to show</p></div>
+                              
+                            )
+                            :
+                            (
+							groupMenu?.map((menu, index)=>{
 								return (
-					<tr key={index}>
-					<th scope="row">1</th>
-					<td>Mark</td>
-					<td className="truncate-td">
-						<span className="">
-						iuiuhihiihihijojpjoiopkpk mpmmpm mmionononon 
-						</span>
-					</td>
-					<td>Mark</td>
-					<td>
-						<span onClick={() => {setShowEditModal(true)}} className='table-action'>
-						<em className="icon ni ni-edit" />
-						</span>
-						<span onClick={()=> {setDeleteId(index); setDeleteModal(true)}} className='table-action'>
-						<em className="icon ni ni-trash" />
-						</span>
-					</td>
-					</tr>
-				);
+									<tr key={menu._id}>
+									<th scope="row">{index +1}</th>
+									<td>{menu.name}</td>
+									<td className="truncate-td">
+										<span className="">
+										{menu?.widget?.name} 
+										</span>
+									</td>
+									<td>
+									{
+											menu.isActive ?
+												<span className="tb-status text-success">Active</span>
+											:
+												<span className="tb-status text-danger">inActive</span>
+										}
+									</td>
+									<td>
+										<span onClick={() => {setEditGroupedMenuForm(menu); setShowEditModal(true)}} className='table-action'>
+										<em className="icon ni ni-edit" />
+										</span>
+										<span onClick={()=> {setDeleteId(menu._id); setDeleteModal(true)}} className='table-action'>
+										<em className="icon ni ni-trash" />
+										</span>
+									</td>
+									</tr>
+								);
 							})
+							)
 						}
 					</tbody>
 				</table>
@@ -191,13 +270,13 @@ export default function GroupedMenuTab() {
 										<div className="form-control-wrap ">
 											<div className="form-control-select">
 											<select value={groupedMenuForm.widget} onChange={(e)=>handleGroupedMenuWidget(e)} className="form-control" id="default-06">
-												<option hidden value=''> select an Agent</option>
-												<option value="option_select_name">
-												Option select name
-												</option>
-												<option value="option_select_name">
-												Option select name
-												</option>
+												<option hidden value=''> {widgetLoading ? 'Loading...' :'select an Agent'}</option>
+												
+												{widgets?.map((widget, index) => (
+													<option key={index} value={widget._id}>
+													{widget?.name}
+													</option>
+												))}
 											</select>
 											</div>
 										</div>
@@ -233,7 +312,8 @@ export default function GroupedMenuTab() {
 										onClick={()=> handleSubmit()}
 										className="btn btn-lg btn-primary"
 									>
-										Create Menu
+										{ createGroupMenuLoading ? <Spinnar /> : 'Create Menu'}
+										
 									</div>
 								</li>
 								<li>
@@ -289,13 +369,13 @@ export default function GroupedMenuTab() {
 										<div className="form-control-wrap ">
 											<div className="form-control-select">
 											<select value={editGroupedMenuForm.widget} onChange={(e)=>handleEditGroupedMenuWidget(e)} className="form-control" id="default-06">
-												<option hidden value=''> select an Agent</option>
-												<option value="option_select_name">
-												Option select name
-												</option>
-												<option value="option_select_name">
-												Option select name
-												</option>
+												<option hidden value=''>  {widgetLoading ? 'Loading...' :'select an Agent'}</option>
+												
+												{widgets?.map((widget, index) => (
+													<option key={index} value={widget._id}>
+													{widget?.name}
+													</option>
+												))}
 											</select>
 											</div>
 										</div>
@@ -330,7 +410,8 @@ export default function GroupedMenuTab() {
 										onClick={()=> handleUpdateGroupedMenu()}
 										className="btn btn-lg btn-primary"
 									>
-										Update Menu
+										{updateGroupMenuLoading? <Spinnar /> : 'Update Menu'}
+										
 									</div>
 								</li>
 								<li>
@@ -368,7 +449,8 @@ export default function GroupedMenuTab() {
 										onClick={()=> handleDeleteGroupedMenu()}
 										className="btn btn-lg btn-primary"
 									>
-										Delete Menu
+										{deleteGroupMenuLoading ? <Spinnar /> : 'Delete Menu'}
+										
 									</div>
 								</li>
 								<li>

@@ -1,30 +1,37 @@
 // Dashboard for Admin
 import { useState } from "react";
-import ProfileTab from "../components/client/profiletab";
-import OrganizationTab from "../components/client/organizationtab";
-// import _route from "../constant/routes";
+import ProfileTab from "../components/admin/profiletab";
+import useCreateAdmin from '../hooks/admin/admin/usecreateadmin';
+import {  useNavigate } from 'react-router-dom';
+import _route from "../constants/routes";
 
 export default function CreateAdmin() {
+	const navigate = useNavigate()
 	const [formIndex, setFormIndex] = useState(0)
+	const {createAdmin, loading} = useCreateAdmin()
 	const [clientData, setClientData] = useState({
 	  firstName: '',
 	  lastName: '',
 	  email: '',
 	  phone: '',
 	  password: '',
-	  admin: '',
-	  organisationName: '',
-	  organisationWebsite: '',
 	})
 
-	const handleSubmit = (e)=>{
+	const handleSubmit = async (e)=>{
 		e.preventDefault()
-		if(formIndex === 0){
-			console.log(clientData)
-			setFormIndex(1)
-		}else{
-			console.log(clientData)
+		const formData = {
+		  fullNames: {
+			firstname: clientData.firstName,
+			lastname: clientData.lastName,
+		  },
+		  role: 'ADMINISTRATOR',
+		  phone: clientData.phone,
+		  password: clientData.password,
+		  username: clientData.email,
+		  
 		}
+		console.log(formData)
+		await createAdmin(formData) && navigate(_route._admin_administrator)
 	}
 
 	return (
@@ -57,24 +64,10 @@ export default function CreateAdmin() {
                         <h5>Profile Info</h5>
                       </div>
                     </li>
-                    <li
-                      className={`clipboard-init ${
-                        formIndex === 1 && "current"
-                      }`}
-                      onClick={() => setFormIndex(1)}
-                    >
-                      <div>
-                        {/* <span className="number">02</span> */}
-                        <h5>Organisation Info</h5>
-                      </div>
-                    </li>
                   </ul>
                 </div>
 				{
-					formIndex === 0 && <ProfileTab setFormIndex={setFormIndex} setClientData={setClientData} clientData={clientData} />
-				}
-				{
-					formIndex === 1 && <OrganizationTab  setClientData={setClientData} clientData={clientData} setFormIndex={setFormIndex} />
+					formIndex === 0 && <ProfileTab loading={loading} setFormIndex={setFormIndex} setClientData={setClientData} clientData={clientData} />
 				}
               </form>
             </div>

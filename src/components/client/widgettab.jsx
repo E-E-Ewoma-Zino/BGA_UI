@@ -1,37 +1,113 @@
 import Modal from "../modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputNormal from '../input/inputnormal'
+import useGetAllWidget from '../../hooks/admin/widget/usegetallwidget';
+import { useParams } from 'react-router-dom';
+import useCreateWidget from '../../hooks/admin/widget/usecreatewidget';
+import useDeleteWidget from "../../hooks/admin/widget/usedeletewidget"
+import useUpdateeWidget from "../../hooks/admin/widget/useupdatewidget"
+import Spinnar from "../spinnar";
 
 export default function WidgetTab() {
 	const [showModal, setShowModal] = useState(false)
 	const [showEditModal, setShowEditModal] = useState(false)
 	const [showDeleteModal, setDeleteModal] = useState(false)
+    const {deleteWidget, loading: deleteWidgetLoading} = useDeleteWidget()
+    const {getAllWidget, loading} = useGetAllWidget()
+    const {createWidget, loading: createWidgetLoading} = useCreateWidget()
+    const {upDateWidget, loading: upDatteWidgetLoading} = useUpdateeWidget()
+	const [profile, setProfile] = useState(null);
+    const {id} = useParams()
 	const [deleteId, setDeleteId] = useState(null)
+    const [widgetData, setWidgetData] = useState([])
+    const [image, setImage] = useState(null)
     const [widgetForm, setWidgetForm] = useState({
       name: '',
       url: '',
       isActive: true,
-    //   client: id,
+      client: id,
       internal: true
     }) 
     const [editWidgetForm, setEditWidgetForm] = useState({
-      name: 'Godwin',
-      url: 'Daniel',
-      isActive: true,
-    //   client: id,
-      internal: true
-    })
+		name: '',
+		url: '',
+		isActive: true,
+		client: id,
+		internal: true
+	  })
 
 	const handleClose = ()=>{
 		setShowModal(false)
 		setShowEditModal(false)
 		setDeleteModal(false)
+		setProfile(null)
 		setDeleteId(null)
+		setWidgetForm({
+			name: '',
+			url: '',
+			isActive: true,
+			client: id,
+			internal: true
+		  })
+		setEditWidgetForm({
+			name: '',
+			url: '',
+			isActive: true,
+			client: id,
+			internal: true
+		  })
 	} 
 
+	 
+const fetch = async ()=>{
+	handleClose()
+	const data = await getAllWidget(id)
+	if(data !== undefined){
+	  setWidgetData(data)
+	}
+} 
+   
+// display select image 
+// const imageHandler = (e) => {
+// 	setImage(e.target.files[0]);
+//   };
+  
+const imageHandle = (e) => {
+	const reader = new FileReader();
+	reader.onload = () => {
+		if (reader.readyState === 2) {
+		setProfile(reader.result);
+		setImage(e.target.files[0]);
+		}
+	};
+	reader.readAsDataURL(e.target.files[0]);
+	};
+ 
 
-	const handleSubmit = ()=>{
-		console.log(widgetForm)
+
+useEffect(()=>{
+	fetch()
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+
+	const handleSubmit = async (e)=>{
+		e.preventDefault()
+		if(image !== null){
+		  
+		  if(widgetForm.url === '') delete widgetForm.url;
+		  let formData = new FormData()
+		  Object.keys(widgetForm).forEach(key => {
+			formData.append(key, widgetForm[key]);
+		  });
+		  // append form data
+		console.log(image)
+		  formData.append('icon', image);
+		  formData.forEach((value, key) => {
+			console.log(key, value);
+		  });
+		  await createWidget(formData) && fetch()
+		}
 	}
 
 	const handleWidgetName = (e)=>{
@@ -41,19 +117,56 @@ export default function WidgetTab() {
 		setWidgetForm(prv=> ({...prv, url: e.target.value}))
 	}
 	const handleWidgetInternal= (e)=>{
-		console.log(widgetForm)
 		setWidgetForm(prv=> ({...prv, internal: e.target.checked}))
 	}
 	const handleWidgetAsActive = (e)=>{
-		console.log(widgetForm)
 		setWidgetForm(prv=> ({...prv, isActive: e.target.checked}))
 	}
 
 	
 	
-	const handleUpdateWidget = ()=>{
-		console.log(editWidgetForm)
+const handleUpdateWidget = async (e)=>{
+	e.preventDefault()
+	if(image !== null){
+	  
+	  const formData1 = {
+	    name: editWidgetForm.name,
+	      url: editWidgetForm.url ? editWidgetForm.url : '',
+	      isActive: editWidgetForm.isActive,
+	      internal: editWidgetForm.internal
+	  }
+	  if(formData1.url === '' || formData1.url === undefined ) delete formData1.url;
+	  let formData = new FormData()
+	  Object.keys(formData1).forEach(key => {
+	    formData.append(key, formData1[key]);
+	  });
+	  // append form data
+		console.log(image)
+	  formData.append('icon', image);
+	//   console.log(formData)
+	  formData.forEach((value, key) => {
+		console.log(key, value);
+	  });
+	  await upDateWidget(formData, editWidgetForm._id) && fetch()
+	}else{
+		
+		const formData1 = {
+			name: editWidgetForm.name,
+			url: editWidgetForm.url ? editWidgetForm.url : '',
+			isActive: editWidgetForm.isActive,
+			internal: editWidgetForm.internal
+		  }
+		  if(formData1.url === '' || formData1.url === undefined ) delete formData1.url;
+		  let formData = new FormData()
+		  Object.keys(formData1).forEach(key => {
+			formData.append(key, formData1[key]);
+		  });
+		  console.log(Boolean(formData1.isActive))
+		  // append form data
+		  await upDateWidget(formData, editWidgetForm._id) && fetch()
 	}
+  
+  }
 	const handleEditWidgetName = (e)=>{
 		setEditWidgetForm(prv=> ({...prv, name: e.target.value}))
 	}
@@ -61,16 +174,17 @@ export default function WidgetTab() {
 		setEditWidgetForm(prv=> ({...prv, url: e.target.value}))
 	}
 	const handleEditWidgetInternal= (e)=>{
-		console.log(widgetForm)
+		console.log(editWidgetForm)
 		setEditWidgetForm(prv=> ({...prv, internal: e.target.checked}))
 	}
 	const handleEditWidgetAsActive = (e)=>{
-		console.log(widgetForm)
 		setEditWidgetForm(prv=> ({...prv, isActive: e.target.checked}))
+		console.log(editWidgetForm)
+		console.log(e.target.checked)
 	}
 
-	const handleDeleteWidget = ()=>{
-		console.log(deleteId)
+	const handleDeleteWidget = async ()=>{
+		await deleteWidget(deleteId, id) && fetch()
 		handleClose()
 	}
 
@@ -124,29 +238,58 @@ export default function WidgetTab() {
 					</tr>
 					</thead>
 					<tbody>
-						{
-							[1,2,3,4,5].map((element, index)=>{
+					{ loading 
+                          ?
+                          <tr>
+							<td ></td>
+							<td ></td>
+							<td >
+								<div className='w-full h-full flex justify-center items-center'><Spinnar /></div>
+							</td>
+							<td ></td>
+							<td ></td>
+						  </tr>
+                            
+                          :
+						  widgetData.length === 0 
+                            ?
+                            (
+                              
+                              <div className='w-full h-full flex justify-center items-center'><p className='text-textgrey'>No Data to show</p></div>
+                              
+                            )
+                            :
+                            (
+							widgetData.map((widget, index)=>{
 								return (
-					<tr key={index}>
-					<th scope="row">1</th>
-					<td>Mark</td>
-					<td className="truncate-td">
-						<span className="">
-						iuiuhihiihihijojpjoiopkpk mpmmpm mmionononon 
-						</span>
-					</td>
-					<td>Mark</td>
-					<td>
-						<span onClick={() => {setShowEditModal(true)}} className='table-action'>
-						<em className="icon ni ni-edit" />
-						</span>
-						<span onClick={()=> {setDeleteId(index); setDeleteModal(true)}} className='table-action'>
-						<em className="icon ni ni-trash" />
-						</span>
-					</td>
-					</tr>
-				);
+									<tr key={widget._id}>
+									<th scope="row">{index + 1}</th>
+									<td>{widget?.name}</td>
+									<td className="truncate-td">
+										<span className="">
+										{widget.url}
+										</span>
+									</td>
+									<td>
+										{
+											widget.isActive ?
+												<span className="tb-status text-success">Active</span>
+											:
+												<span className="tb-status text-danger">inActive</span>
+										}
+									</td>
+									<td>
+										<span onClick={() => {setEditWidgetForm(widget); setProfile(widget.icon.url); setShowEditModal(true)}} className='table-action'>
+										<em className="icon ni ni-edit" />
+										</span>
+										<span onClick={()=> {setDeleteId(widget._id); setDeleteModal(true)}} className='table-action'>
+										<em className="icon ni ni-trash" />
+										</span>
+									</td>
+									</tr>
+								);
 							})
+							)
 						}
 					</tbody>
 				</table>
@@ -156,7 +299,7 @@ export default function WidgetTab() {
 		
 		{showModal && (
 				<Modal handleClose={handleClose} showModal={showModal} >
-					<div className="modal-body modal-body-lg">
+					<form onSubmit={handleSubmit} className="modal-body modal-body-lg">
 						<h5 className="title">Create Widget</h5>
 						<div className="tab-content">
 							<div className="tab-pane active" id="personal" role="tabpanel">
@@ -195,9 +338,9 @@ export default function WidgetTab() {
 										<InputNormal
 										value={widgetForm.url}
 										handleChange={handleWidgetUrl}
-										placeholder="Enter Phone"
-										type="tel"
-										label="Phone"
+										placeholder="Enter URL"
+										type="url"
+										label="Widget URL"
 										id="phone"
 										required
 										/>
@@ -221,6 +364,24 @@ export default function WidgetTab() {
 									</label>
 									</div>
 								</div>
+								<div className="col-12">
+									<div className="custom-control ps-0 custom-switch">
+									<input
+										type="file"
+										accept="image/*"
+										onChange={imageHandle}
+										id='iconUploade'
+										required
+										// className="custom-control-input"
+									/>
+									{profile && <label
+										// className="custom-control-label"
+										htmlFor="iconUploade"
+									>
+										<img style={{'width': '50px'}} alt="icon" src={profile} />
+									</label>}
+									</div>
+								</div>
 								</div>
 							</div>
 							{/* .tab-pane */}
@@ -228,12 +389,14 @@ export default function WidgetTab() {
 						<div className="col-12 mt-4">
 							<ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
 								<li>
-									<div
-										onClick={()=> handleSubmit()}
+									<button
 										className="btn btn-lg btn-primary"
 									>
-										Create Widget
-									</div>
+										{
+											createWidgetLoading ? <Spinnar /> : 'Create Widget'
+										}
+										
+									</button>
 								</li>
 								<li>
 									<div
@@ -246,14 +409,14 @@ export default function WidgetTab() {
 							</ul>
 						</div>
 						{/* .tab-content */}
-					</div>
+					</form>
 				</Modal>
 		)}
 
 
 		{showEditModal && (
 				<Modal handleClose={handleClose} showModal={showEditModal} >
-					<div className="modal-body modal-body-lg">
+					<form onSubmit={handleUpdateWidget} className="modal-body modal-body-lg">
 						<h5 className="title">Edit Widget</h5>
 						<div className="tab-content">
 							<div className="tab-pane active" id="personal" role="tabpanel">
@@ -318,6 +481,23 @@ export default function WidgetTab() {
 									</label>
 									</div>
 								</div>
+								<div className="col-12">
+									<div className="custom-control ps-0 custom-switch">
+									<input
+										type="file"
+										accept="image/*"
+										onChange={imageHandle}
+										id='iconUpload'
+										// className="custom-control-input"
+									/>
+									{profile && <label
+										// className="custom-control-label"
+										htmlFor="iconUpload"
+									>
+										<img style={{'width': '50px'}} alt="icon" src={profile} />
+									</label>}
+									</div>
+								</div>
 								</div>
 							</div>
 							{/* .tab-pane */}
@@ -325,12 +505,12 @@ export default function WidgetTab() {
 						<div className="col-12 mt-4">
 							<ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
 								<li>
-									<div
-										onClick={()=> handleUpdateWidget()}
+									<button
 										className="btn btn-lg btn-primary"
 									>
-										Update Widget
-									</div>
+										{upDatteWidgetLoading ? <Spinnar /> : 'Update Widget'}
+										
+									</button>
 								</li>
 								<li>
 									<div
@@ -343,7 +523,7 @@ export default function WidgetTab() {
 							</ul>
 						</div>
 						{/* .tab-content */}
-					</div>
+					</form>
 				</Modal>
 		)}
 
@@ -367,7 +547,10 @@ export default function WidgetTab() {
 										onClick={()=> handleDeleteWidget()}
 										className="btn btn-lg btn-primary"
 									>
-										Delete Widget
+										{
+											deleteWidgetLoading ? <Spinnar /> : 'Delete Widget'
+										}
+										
 									</div>
 								</li>
 								<li>

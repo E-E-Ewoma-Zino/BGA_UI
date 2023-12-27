@@ -1,26 +1,40 @@
 // Partial Sidebar for Dashboar
 
 import { NavLink } from "react-router-dom";
-import _route from "../../constant/routes";
+import _route from "../../constants/routes";
+import logo from '../../assets/images/full-logo.png'
+import smallLogo from '../../assets/images/logo.png'
+import logoDark from '../../assets/images/full-logo-dark.png'
+import { useRef } from "react";
 
 export default function _sidebar() {
+	const sideRef = useRef()
+
+	const handleMenu = ()=>{
+		if(sideRef.current.classList.contains('is-compact') === false){
+			sideRef.current.classList.add('is-compact')
+		}else{
+			sideRef.current.classList.remove('is-compact')
+		}
+	}
+
 	return (
-		<div className="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
+		<div ref={sideRef} className="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
 			<div className="nk-sidebar-element nk-sidebar-head">
 				<div className="nk-sidebar-brand">
-					<a href="html/index.html" className="logo-link nk-sidebar-logo">
-						<img className="logo-light logo-img" src="/assets/images/logo.png" srcSet="/assets/images/logo2x.png 2x" alt="logo" />
-						<img className="logo-dark logo-img" src="/assets/images/logo-dark.png" srcSet="/assets/images/logo-dark2x.png 2x" alt="logo-dark" />
-						<img className="logo-small logo-img logo-img-small" src="/assets/images/logo-small.png" srcSet="/assets/images/logo-small2x.png 2x" alt="logo-small" />
+					<a href={_route._admin_dashboard} className="logo-link nk-sidebar-logo">
+						<img className="logo-light logo-img" src={logoDark} alt="logo" />
+						<img className="logo-dark logo-img" src={logo} alt="logo-dark" />
+						<img className="logo-small logo-img logo-img-small" src={smallLogo} alt="logo-small" />
 					</a>
 				</div>
 				<div className="nk-menu-trigger me-n2">
 					<a href="#x" className="nk-nav-toggle nk-quick-nav-icon d-xl-none" data-target="sidebarMenu">
 						<em className="icon ni ni-arrow-left" />
 					</a>
-					<a href="#x" className="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex" data-target="sidebarMenu">
+					<span onClick={() => handleMenu()} className="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex" data-target="sidebarMenu">
 						<em className="icon ni ni-menu" />
-					</a>
+					</span>
 				</div>
 			</div>
 			{/* .nk-sidebar-element */}

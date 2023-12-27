@@ -1,22 +1,57 @@
 import Modal from "../modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputNormal from '../input/inputnormal'
+import useGetAllAdmin from '../../hooks/admin/admin/usegetalladmin';
+import useUpdateAdminClient from "../../hooks/admin/client/useupdateadminclient";
+import { useParams } from "react-router-dom";
+import Spinnar from "../spinnar";
 
-export default function ProfileDetails() {
+
+export default function ProfileDetails({ data, upDateProfile, fetch, setUpDateProfile}) {
 	const [showModal, setShowModal] = useState(false)
-	const [upDateProfile, setUpDateProfile] = useState({
-		firstName: 'Robert',
-		lastName: 'Godwin',
-		phone: '082877874',
-		password: 'hohohdo23e',
-		admin: "Zino",
-		organisationName: 'Foundation Center',
-		organisationWebsite: 'http://foundation.url',
-	})
+	const {getAllAdmin, loading} = useGetAllAdmin()
+	const [admin, setAdmin] = useState([])
+    const {id} = useParams()
+	const {upDateAdminClient, loading: loadingUpdate} = useUpdateAdminClient()
+	// const [upDateProfile, setUpDateProfile] = useState({
+	// 	firstName: 'Robert',
+	// 	lastName: 'Godwin',
+	// 	phone: '082877874',
+	// 	password: 'hohohdo23e',
+	// 	admin: "Zino",
+	// 	organisationName: 'Foundation Center',
+	// 	organisationWebsite: 'http://foundation.url',
+	// })
 
 
-	const handleSubmit = ()=>{
-		console.log(upDateProfile)
+	const fetchAdmin = async ()=>{
+		const data = await getAllAdmin()
+		if(data !== undefined){
+		  setAdmin(data)
+		}
+	}
+
+	
+	useEffect(()=>{
+		fetchAdmin()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	  }, [])
+
+	const handleSubmit = async ()=>{
+		const formData = {
+		  fullNames: {
+			firstname: upDateProfile.firstName,
+			lastname: upDateProfile.lastName,
+		  },
+		  organization:{
+			name: upDateProfile.organisationName,
+			website: upDateProfile.organisationWebsite
+		  },
+		  phone: upDateProfile.phone,
+		  admin: upDateProfile.admin
+		}
+		  console.log(formData)
+		await upDateAdminClient(formData, id) && handleClose()
 	}
 
 	const handleUpdateFirstName = (e)=>{
@@ -28,8 +63,8 @@ export default function ProfileDetails() {
 	const handleUpdatePhone = (e)=>{
 		setUpDateProfile(prv=> ({...prv, phone: e.target.value}))
 	}
-	const handleUpdatePassword = (e)=>{
-		setUpDateProfile(prv=> ({...prv, password: e.target.value}))
+	const handleUpdateadmin = (e)=>{
+		setUpDateProfile(prv=> ({...prv, admin: e.target.value}))
 	}
 	const handleUpdateOrganizationName = (e)=>{
 		setUpDateProfile(prv=> ({...prv, organisationName: e.target.value}))
@@ -40,8 +75,10 @@ export default function ProfileDetails() {
 
 	
 	const handleClose = ()=>{
+		fetch()
 		setShowModal(false)
 	}
+	console.log(upDateProfile)
   return (
     <>
       <div className="card-inner card-inner-lg">
@@ -79,7 +116,7 @@ export default function ProfileDetails() {
             >
               <div className="data-col">
                 <span className="data-label">Full Name</span>
-                <span className="data-value">Abu Bin Ishtiyak</span>
+                <span className="data-value">{`${data?.fullNames?.firstname} ${data?.fullNames?.lastname}`}</span>
               </div>
               <div className="data-col data-col-end">
                 <span className="data-more">
@@ -91,7 +128,7 @@ export default function ProfileDetails() {
             <div className="data-item">
               <div className="data-col">
                 <span className="data-label">Email</span>
-                <span className="data-value">info@softnio.com</span>
+                <span className="data-value">{data?.username}</span>
               </div>
               <div className="data-col data-col-end">
                 <span className="data-more disable">
@@ -106,7 +143,7 @@ export default function ProfileDetails() {
             >
               <div className="data-col">
                 <span className="data-label">Phone Number</span>
-                <span className="data-value">0813948393</span>
+                <span className="data-value">{data?.phone}</span>
               </div>
               <div className="data-col data-col-end">
                 <span className="data-more">
@@ -115,7 +152,7 @@ export default function ProfileDetails() {
               </div>
             </div>
             {/* data-item */}
-            <div
+            {/* <div
               className="data-item"
               onClick={() => setShowModal((prv) => !prv)}
             >
@@ -128,7 +165,7 @@ export default function ProfileDetails() {
                   <em className="icon ni ni-forward-ios" />
                 </span>
               </div>
-            </div>
+            </div> */}
             {/* data-item */}
           </div>
           {/* data-list */}
@@ -142,7 +179,7 @@ export default function ProfileDetails() {
             >
               <div className="data-col">
                 <span className="data-label">Organization Name</span>
-                <span className="data-value text-soft">Not add yet</span>
+                <span className="data-value text-soft">{data?.organization?.name}</span>
               </div>
               <div className="data-col data-col-end">
                 <span className="data-more">
@@ -157,7 +194,7 @@ export default function ProfileDetails() {
             >
               <div className="data-col">
                 <span className="data-label">Organization Website</span>
-                <span className="data-value text-soft">Not add yet</span>
+                <span className="data-value text-soft">{data?.organization?.website}</span>
               </div>
               <div className="data-col data-col-end">
                 <span className="data-more">
@@ -172,7 +209,7 @@ export default function ProfileDetails() {
             >
               <div className="data-col">
                 <span className="data-label">Administrator Assigned</span>
-                <span className="data-value text-soft">Not add yet</span>
+                <span className="data-value text-soft">{`${data?.admin?.fullNames?.firstname} ${data?.admin?.fullNames?.lastname}`}</span>
               </div>
               <div className="data-col data-col-end">
                 <span className="data-more">
@@ -213,7 +250,7 @@ export default function ProfileDetails() {
                   tabIndex={-1}
                   role="tab"
                 >
-                  Address
+                  Organization
                 </a>
               </li>
             </ul>
@@ -254,7 +291,7 @@ export default function ProfileDetails() {
                       required
                     />
                   </div>
-                  <div className="col-md-6">
+                  {/* <div className="col-md-6">
                     <InputNormal
                       value={upDateProfile.password}
 					  handleChange={handleUpdatePassword}
@@ -264,7 +301,7 @@ export default function ProfileDetails() {
                       id="firstNAme"
                       required
                     />
-                  </div>
+                  </div> */}
                   {/* <div className="col-12">
                     <div className="custom-control custom-switch">
                       <input
@@ -336,14 +373,17 @@ export default function ProfileDetails() {
                       </label>
                       <div className="form-control-wrap ">
                         <div className="form-control-select">
-                          <select className="form-control" id="default-06">
-                            <option hidden selected> select an Agent</option>
-                            <option value="option_select_name">
-                              Option select name
-                            </option>
-                            <option value="option_select_name">
-                              Option select name
-                            </option>
+                          <select value={upDateProfile.admin} onChange={(e)=> handleUpdateadmin(e)} className="form-control" id="default-06">
+                            <option hidden value=''> {loading ? 'Loading...' : 'select an Agent'}</option>
+							{
+								admin?.map((admin, index)=>{
+									return (
+										<option key={index} value={admin._id}>
+										{`${admin.fullNames.firstname} ${admin.fullNames.lastname}`}
+										</option>
+									)
+								})
+							}
                           </select>
                         </div>
                       </div>
@@ -360,7 +400,10 @@ export default function ProfileDetails() {
 						onClick={()=> handleSubmit()}
 						className="btn btn-lg btn-primary"
 					>
-						Update Profile
+						{
+							loadingUpdate ? <Spinnar /> : 'Update Profile'
+						}
+						
 					</div>
 					</li>
 					<li>
@@ -377,6 +420,7 @@ export default function ProfileDetails() {
           </div>
         </Modal>
       )}
+	  
     </>
   );
 }

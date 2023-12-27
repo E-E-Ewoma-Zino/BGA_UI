@@ -1,13 +1,56 @@
 // Dashboard for Admin
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProfileDetails from '../components/client/profiledetails'
 import WidgetTab from '../components/client/widgettab'
 import GroupedMenuTab from "../components/client/groupedmenutab";
 import MenuTab from "../components/client/menutab";
+import { useNavigate, useParams } from 'react-router-dom';
+import useGetSingleAdminClient from '../hooks/admin/client/usegetsingleadminclient';
 
 export default function ViewClient() {
+  const navigate = useNavigate()
   const [tabIndex, setTabIndex] = useState(0)
+  const {id} = useParams()
+  const {getSingleAdminClient, /*loading*/} = useGetSingleAdminClient()
+  const [data, setData] = useState()
+  const [clientData, setClientData] = useState({
+	firstName: '',
+	lastName: '',
+	admin: '',
+	// email: '',
+	phone: '',
+	// password: '',
+	organisationName: '',
+	organisationWebsite: '',
+  })
+
+  
+  const fetch = async ()=>{
+	// setProfileModal(false)
+	const data = await getSingleAdminClient(id)
+	if(data !== undefined){
+	  setClientData({
+		firstName: data.fullNames.firstname,
+		lastName: data.fullNames.lastname,
+		phone: data.phone,
+		admin: data.admin._id,
+		// username: data.username,
+		// password: data.password,
+		organisationName: data.organization.name,
+		organisationWebsite: data.organization.website
+		
+	  })
+	  setData(data)
+	}
+  }
+
+  useEffect(()=>{
+	fetch()
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+
 	return (
     <div className="nk-content-body">
       <div className="nk-block-head nk-block-head-sm">
@@ -15,33 +58,23 @@ export default function ViewClient() {
           <div className="nk-block-head-content">
             <h3 className="nk-block-title page-title">
               Users /{" "}
-              <strong className="text-primary small">Abu Bin Ishtiyak</strong>
+              <strong className="text-primary small">{`${data?.fullNames?.firstname} ${data?.fullNames?.lastname}`}</strong>
             </h3>
-            <div className="nk-block-des text-soft">
-              <ul className="list-inline">
-                <li>
-                  User ID: <span className="text-base">UD003054</span>
-                </li>
-                <li>
-                  Last Login:{" "}
-                  <span className="text-base">15 Feb, 2019 01:02 PM</span>
-                </li>
-              </ul>
-            </div>
           </div>
           <div className="nk-block-head-content">
             <div
+			onClick={()=> navigate(-1)}
               className="btn btn-outline-light bg-white d-none d-sm-inline-flex"
             >
               <em className="icon ni ni-arrow-left" />
               <span>Back</span>
             </div>
-            <a
-              href="html/user-list-regular.html"
+            <span
+			onClick={()=> navigate(-1)}
               className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"
             >
               <em className="icon ni ni-arrow-left" />
-            </a>
+            </span>
           </div>
         </div>
       </div>
@@ -65,13 +98,15 @@ export default function ViewClient() {
                 </li>
                 <li onClick={()=> setTabIndex(2)}  className={`px-2 px-md-3 clipboard-init ${tabIndex === 2 && ' nav-item active' }`}>
                   <div className={`nav-link `}>
-                    <em className="icon ni ni-file-text" />
+                    {/* <em className="icon ni ni-file-text" /> */}
+					<em class="icon ni ni-grid-add-fill-c"></em>
                     <span>Grouped Menu</span>
                   </div>
                 </li>
                 <li onClick={()=> setTabIndex(3)}  className={`px-2 px-md-3 clipboard-init ${tabIndex === 3 && ' nav-item active' }`}>
                   <div className={`nav-link `}>
-                    <em className="icon ni ni-file-text" />
+				  <em class="icon ni ni-dashboard-fill"></em>
+                    {/* <em className="icon ni ni-file-text" /> */}
                     <span>Menu</span>
                   </div>
                 </li>
@@ -79,7 +114,7 @@ export default function ViewClient() {
               {/* .nav-tabs */}
 
               {
-				tabIndex === 0 && <ProfileDetails />
+				tabIndex === 0 && <ProfileDetails setUpDateProfile={setClientData} upDateProfile={clientData} fetch={fetch} data={data} />
 			  }
               {
 				tabIndex === 1 && <WidgetTab />

@@ -1,10 +1,41 @@
 // Dashboard for Admin
-
 import { useState } from "react";
 import ProfileDetails from '../components/admin/profiledetails'
+import { useEffect } from 'react';
+import { useNavigation, useParams } from 'react-router-dom';
+import useGetSingleAdmin from '../hooks/admin/admin/usegetsingleadmin';
 
 export default function ViewAdmin() {
-  const [tabIndex, setTabIndex] = useState(0)
+	const navigate = useNavigation()
+    const {id} = useParams()
+	const [tabIndex, setTabIndex] = useState(0)
+    const {getSingleAdmin, /*loading*/} = useGetSingleAdmin()
+    const [data, setData] = useState()
+    const [clientData, setClientData] = useState(null)
+
+  
+    
+  const fetch = async ()=>{
+	// setProfileModal(false)
+	const data = await getSingleAdmin(id)
+	if(data !== undefined){
+	  setClientData({
+		firstName: data.fullNames.firstname,
+		lastName: data.fullNames.lastname,
+		phone: data.phone
+	  })
+	  console.log(data)
+	  setData(data)
+	}
+  }
+
+
+  useEffect(()=>{  
+	fetch()
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+
 	return (
     <div className="nk-content-body">
       <div className="nk-block-head nk-block-head-sm">
@@ -12,9 +43,9 @@ export default function ViewAdmin() {
           <div className="nk-block-head-content">
             <h3 className="nk-block-title page-title">
               Administrator /{" "}
-              <strong className="text-primary small">Abu Bin Ishtiyak</strong>
+              <strong className="text-primary small">{`${data?.fullNames?.firstname} ${data?.fullNames?.lastname}`}</strong>
             </h3>
-            <div className="nk-block-des text-soft">
+            {/* <div className="nk-block-des text-soft">
               <ul className="list-inline">
                 <li>
                   User ID: <span className="text-base">UD003054</span>
@@ -24,21 +55,22 @@ export default function ViewAdmin() {
                   <span className="text-base">15 Feb, 2019 01:02 PM</span>
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
           <div className="nk-block-head-content">
             <div
+			onClick={()=> navigate(-1)}
               className="btn btn-outline-light bg-white d-none d-sm-inline-flex"
             >
               <em className="icon ni ni-arrow-left" />
               <span>Back</span>
             </div>
-            <a
-              href="html/user-list-regular.html"
+            <span
+			onClick={()=> navigate(-1)}
               className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"
             >
               <em className="icon ni ni-arrow-left" />
-            </a>
+            </span>
           </div>
         </div>
       </div>
@@ -76,7 +108,7 @@ export default function ViewAdmin() {
               {/* .nav-tabs */}
 
               {
-				tabIndex === 0 && <ProfileDetails />
+				tabIndex === 0 && <ProfileDetails fetch={fetch} data={data} upDateProfile={clientData} setUpDateProfile={setClientData} />
 			  }
 
               {/* .card-inner */}

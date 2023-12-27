@@ -1,6 +1,6 @@
 import Input from "../input/input"
 
-export default function OrganizationTab({setFormIndex, setClientData, clientData}) {
+export default function OrganizationTab({setFormIndex, loading, admin, setClientData, clientData}) {
 	
 	const handleOrganizationName = (e)=>{
 		setClientData(prv => ({...prv, organisationName: e.target.value}))
@@ -11,6 +11,9 @@ export default function OrganizationTab({setFormIndex, setClientData, clientData
 	const handleAdmin = (e)=>{
 		setClientData(prv => ({...prv, admin: e.target.value}))
 	}
+
+
+	
   return (
     <>
 		
@@ -40,16 +43,27 @@ export default function OrganizationTab({setFormIndex, setClientData, clientData
 					required
 				/>
 				</div>
-				<div className="col-md-6">
-				<Input 
-					type='text'
-					value={clientData.admin}
-					handleChange={handleAdmin}
-					label='Choose Admin'
-					id='admin'
-					required
-				/>
-				</div>
+				{admin.length > 0 &&
+					<div className="col-md-6">
+						<div className="form-group">
+							<label className="form-label" htmlFor="default-06">
+								Assign Admin
+							</label>
+							<div className="form-control-wrap ">
+								<div className="form-control-select">
+								<select value={clientData.admin} onChange={(e)=>handleAdmin(e)} className="form-control" id="default-06">
+									<option hidden value=''> select an Agent</option>
+									{
+										admin.map((admin, index)=>{
+											return <option key={index} value={admin._id}>{`${admin.fullNames.firstname} ${admin.fullNames.lastname}`}</option>
+										})
+									}
+								</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
 				{/* .col */}
 			</div>
 			</div>
@@ -60,7 +74,12 @@ export default function OrganizationTab({setFormIndex, setClientData, clientData
 				Prev
 			</div>
 			<button type="submit" className="btn btn-primary">
-				Submit
+				
+				{loading ? <>
+							<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+							<span class="visually-hidden">Loading...</span>
+						</> : 'Submit'
+					}
 			</button>
 		</div>
     </>

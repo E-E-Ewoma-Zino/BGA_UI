@@ -1,12 +1,19 @@
 // Dashboard for Admin
-import { Link } from "react-router-dom";
-import { useState } from "react";
+// import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import ProfileTab from "../components/client/profiletab";
 import OrganizationTab from "../components/client/organizationtab";
-// import _route from "../constant/routes";
+import { useState, useEffect } from 'react';
+import useGetAllAdmin from '../hooks/admin/admin/usegetalladmin';
+import useCreateAdminClient from '../hooks/admin/client/usecreateadminclient';
+import _route from "../constants/routes";
 
 export default function CreateClient() {
+	const navigate = useNavigate()
 	const [formIndex, setFormIndex] = useState(0)
+	const {getAllAdmin, /*loading: getAdminLoading*/} = useGetAllAdmin()
+	const {createAdminClient, loading} = useCreateAdminClient()
+	const [admin, setAdmin] = useState([])
 	const [clientData, setClientData] = useState({
 	  firstName: '',
 	  lastName: '',
@@ -18,15 +25,44 @@ export default function CreateClient() {
 	  organisationWebsite: '',
 	})
 
-	const handleSubmit = (e)=>{
+	const handleSubmit = async (e)=>{
 		e.preventDefault()
 		if(formIndex === 0){
 			console.log(clientData)
 			setFormIndex(1)
 		}else{
-			console.log(clientData)
+			const formData = {
+			  fullNames: {
+				firstname: clientData.firstName,
+				lastname: clientData.lastName,
+			  },
+			  phone: clientData.phone,
+			  admin: clientData.admin,
+			  username: clientData.email,
+			  password: clientData.password,
+			  organization:{
+				name: clientData.organisationName,
+				website: clientData.organisationWebsite
+			  }
+			  
+			}
+			await createAdminClient(formData) && navigate(_route._admin_client)
 		}
 	}
+
+
+	  
+	useEffect(()=>{
+		const fetch = async ()=>{
+		  const data = await getAllAdmin()
+		  if(data !== undefined){
+			setAdmin(data)
+		  }
+		}
+	
+		fetch()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	  }, [])
 
 	return (
     <div className="nk-content-body">
@@ -49,7 +85,6 @@ export default function CreateClient() {
                       className={`first clipboard-init ${
                         formIndex === 0 && "current"
                       }`}
-                      onClick={() => setFormIndex(0)}
                     >
                       <div>
                         <span className="current-info audible"></span>
@@ -61,7 +96,6 @@ export default function CreateClient() {
                       className={`clipboard-init ${
                         formIndex === 1 && "current"
                       }`}
-                      onClick={() => setFormIndex(1)}
                     >
                       <div>
                         {/* <span className="number">02</span> */}
@@ -74,7 +108,7 @@ export default function CreateClient() {
 					formIndex === 0 && <ProfileTab setFormIndex={setFormIndex} setClientData={setClientData} clientData={clientData} />
 				}
 				{
-					formIndex === 1 && <OrganizationTab  setClientData={setClientData} clientData={clientData} setFormIndex={setFormIndex} />
+					formIndex === 1 && <OrganizationTab admin={admin} loading={loading} setClientData={setClientData} clientData={clientData} setFormIndex={setFormIndex} />
 				}
               </form>
             </div>
