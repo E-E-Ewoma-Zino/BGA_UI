@@ -264,7 +264,7 @@ console.log(groupMenu)
 									required
 									/>
 								</div>
-								<div className="col-12">
+								{widgets.length > 0 && <div className="col-12">
 									<div className="form-group">
 										<label className="form-label" htmlFor="default-06">
 											Widget
@@ -283,7 +283,7 @@ console.log(groupMenu)
 											</div>
 										</div>
 									</div>
-								</div>
+								</div>}
 								
 								
 								<div className="col-12">
@@ -363,7 +363,7 @@ console.log(groupMenu)
 									required
 									/>
 								</div>
-								<div className="col-12">
+								{widgets.length > 0 && <div className="col-12">
 									<div className="form-group">
 										<label className="form-label" htmlFor="default-06">
 											Widget
@@ -382,7 +382,7 @@ console.log(groupMenu)
 											</div>
 										</div>
 									</div>
-								</div>
+								</div>}
 								
 								<div className="col-12">
 									<div className="custom-control custom-switch">

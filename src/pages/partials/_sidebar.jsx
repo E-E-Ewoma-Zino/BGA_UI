@@ -10,20 +10,20 @@ import { useRef } from "react";
 export default function _sidebar() {
 	const sideRef = useRef()
 
-	const handleMenu = ()=>{
-		console.log('hey')
-		console.log(sideRef.current.classList.contains('is-compact'))
-		setTimeout(() => {
-			if(sideRef.current.classList.contains('is-compact') === false){
-				console.log('hey1')
-				sideRef.current.classList.add('is-compact')
-			}else{
-				console.log('hey2')
-				sideRef.current.classList.remove('is-compact')
-			}
+	// const handleMenu = ()=>{
+	// 	console.log('hey')
+	// 	console.log(sideRef.current.classList.contains('is-compact'))
+	// 	setTimeout(() => {
+	// 		if(sideRef.current.classList.contains('is-compact') === false){
+	// 			console.log('hey1')
+	// 			sideRef.current.classList.add('is-compact')
+	// 		}else{
+	// 			console.log('hey2')
+	// 			sideRef.current.classList.remove('is-compact')
+	// 		}
 			
-		}, 500);
-	}
+	// 	}, 500);
+	// }
 
 	return (
 		<div id="nk-sidebar" ref={sideRef} className="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">

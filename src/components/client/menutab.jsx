@@ -7,6 +7,7 @@ import useGetAllGroupMenu from '../../hooks/admin/groupmenu/usegetallmenu';
 import useCreateMenu from '../../hooks/admin/menu/usecreatemenu';
 import useUpdateMenu from '../../hooks/admin/menu/useupdatemenu';
 import useDeleteMenu from '../../hooks/admin/menu/usedeletemenu';
+import useGetAllWidget from '../../hooks/admin/widget/usegetallwidget';
 import Spinnar from "../spinnar";
 
 export default function MenuTab() {
@@ -18,6 +19,8 @@ export default function MenuTab() {
     const {deleteMenu, loading: deleteMenuLoading} = useDeleteMenu()
 	const [deleteId, setDeleteId] = useState(null)
     const {upDateMenu, loading: updateMenuLoading} = useUpdateMenu()
+    const {getAllWidget, loading: widgetLoading} = useGetAllWidget()
+    const [widgets, setWidgets] = useState([])
     const {id} = useParams()
     const [menu, setMenu] = useState([])
     const [groupMenu, setGroupMenu] = useState([])
@@ -27,14 +30,16 @@ export default function MenuTab() {
       url: '',
       isActive: true,
       client: id,
-      parent: ''
+      parent: '',
+      widget: ''
     }) 
     const [editMenuForm, setEditMenuForm] = useState({
       name: '',
       url: '',
       isActive: true,
       client: id,
-      parent: ''
+      parent: '',
+      widget: ''
     })
 
 	const handleClose = ()=>{
@@ -66,13 +71,20 @@ const fetch = async ()=>{
 	  setGroupMenu(data)
 	}
   } 
+  const fetchWidgets = async ()=>{
+	handleClose()
+	const data = await getAllWidget(id)
+	if(data !== undefined){
+	  setWidgets(data)
+	}
+  } 
 
 // Making initial get request 
 useEffect(()=>{
 
 	fetch()
 	fetchGroup()
-	// fetchWidgets()
+	fetchWidgets()
 	// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -84,7 +96,8 @@ useEffect(()=>{
 		  url: menuForm.url,
 		  isActive: menuForm.isActive,
 		  client: id,
-		  parent: menuForm.parent
+		  parent: menuForm.parent,
+		  widget: menuForm.widget
 		}
 		if(formData.parent === '') delete formData.parent;
 	  
@@ -101,6 +114,10 @@ useEffect(()=>{
 		console.log(menuForm)
 		setMenuForm(prv=> ({...prv, parent: e.target.value}))
 	}
+	const handleMenuWidget= (e)=>{
+		console.log(menuForm)
+		setMenuForm(prv=> ({...prv, widget: e.target.value}))
+	}
 	const handleMenuAsActive = (e)=>{
 		console.log(menuForm)
 		setMenuForm(prv=> ({...prv, isActive: e.target.checked}))
@@ -110,13 +127,14 @@ useEffect(()=>{
 	
 	const handleUpdateMenu = async (e)=>{
 		e.preventDefault()
-		console.log(editMenuForm)
 		const formData = {
 		  name: editMenuForm.name,
 		  url: editMenuForm.url,
 		  isActive: editMenuForm.isActive,
 		  // client: id,
-		  parent: editMenuForm.parent
+		  parent: editMenuForm.parent,
+		  widget: editMenuForm.widget
+
 		}
 		if(formData.parent === '') delete formData.parent;
 	  console.log(editMenuForm)
@@ -131,6 +149,10 @@ useEffect(()=>{
 	const handleEditMenuParent= (e)=>{
 		console.log(menuForm)
 		setEditMenuForm(prv=> ({...prv, parent: e.target.value}))
+	}
+	const handleEditMenuWidget= (e)=>{
+		console.log(menuForm)
+		setEditMenuForm(prv=> ({...prv, widget: e.target.value}))
 	}
 	const handleEditMenuAsActive = (e)=>{
 		console.log(menuForm)
@@ -152,7 +174,8 @@ useEffect(()=>{
 				isActive: menu.isActive,
 				client: menu.client._id,
 				_id: menu._id,
-				parent: ''
+				parent: '',
+				widget: menu.widget
 			})
 		  }else{
 			setEditMenuForm({
@@ -161,7 +184,8 @@ useEffect(()=>{
 				isActive: menu.isActive,
 				client: menu.client._id,
 				_id: menu._id,
-				parent: menu.parent._id
+				parent: menu.parent._id,
+				widget: menu.widget
 			})
 		  }
 		setShowEditModal(true)
@@ -306,7 +330,7 @@ useEffect(()=>{
 									required
 									/>
 								</div>
-								<div className="col-12">
+								{groupMenu.length > 0 && <div className="col-12">
 									<div className="form-group">
 										<label className="form-label" htmlFor="default-06">
 											Parent
@@ -324,7 +348,26 @@ useEffect(()=>{
 											</div>
 										</div>
 									</div>
-								</div>
+								</div>}
+								{widgets.length > 0 && <div className="col-12">
+									<div className="form-group">
+										<label className="form-label" htmlFor="default-06">
+											Widget
+										</label>
+										<div className="form-control-wrap ">
+											<div className="form-control-select">
+											<select value={menuForm.widget} onChange={(e)=>handleMenuWidget(e)} className="form-control" id="default-06">
+												<option hidden value=''>{widgetLoading ? 'Loading...' : 'select a widget'}</option>
+												{widgets?.map((widget, index) => (
+													<option key={index} value={widget._id}>
+													{widget?.name}
+													</option>
+												))}
+											</select>
+											</div>
+										</div>
+									</div>
+								</div>}
 								
 								
 								<div className="col-12">
@@ -404,14 +447,13 @@ useEffect(()=>{
 									required
 									/>
 								</div>
-								<div className="col-12">
+								{groupMenu.length > 0 && <div className="col-12">
 									<div className="form-group">
 										<label className="form-label" htmlFor="default-06">
 											Parent
 										</label>
 										<div className="form-control-wrap ">
 											<div className="form-control-select">
-												{console.log(editMenuForm)}
 											<select value={editMenuForm.parent} onChange={(e)=>handleEditMenuParent(e)} className="form-control" id="default-06">
 												<option hidden value=''> { groupMenuLoading ? 'Loading' : 'select a parent menu'}</option>
 												{groupMenu?.map((menu, index) => (
@@ -423,7 +465,26 @@ useEffect(()=>{
 											</div>
 										</div>
 									</div>
-								</div>
+								</div>}
+								{widgets.length > 0 && <div className="col-12">
+									<div className="form-group">
+										<label className="form-label" htmlFor="default-06">
+											Widget
+										</label>
+										<div className="form-control-wrap ">
+											<div className="form-control-select">
+											<select value={editMenuForm.widget} onChange={(e)=>handleEditMenuWidget(e)} className="form-control" id="default-06">
+												<option hidden value=''> { groupMenuLoading ? 'Loading' : 'select a widget'}</option>
+												{widgets?.map((widget, index) => (
+													<option key={index} value={widget._id}>
+													{widget?.name}
+													</option>
+												))}
+											</select>
+											</div>
+										</div>
+									</div>
+								</div>}
 								
 								<div className="col-12">
 									<div className="custom-control custom-switch">
