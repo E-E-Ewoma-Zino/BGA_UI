@@ -15,11 +15,17 @@ export default function _header() {
 		await logOutUser()
 	}
 
+	const handleClick = ()=>{
+		document.getElementById('nk-sidebar')?.classList.add('nk-sidebar-active')
+		document.body.classList.add('nav-shown')
+		
+	}
+
 	return (
 		<div className="nk-header nk-header-fixed is-light">
 			<div className="container-fluid">
 				<div className="nk-header-wrap">
-					<div className="nk-menu-trigger d-xl-none ms-n1">
+					<div onClick={() => handleClick()} className="nk-menu-trigger d-xl-none ms-n1">
 						<a href="#x" className="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em className="icon ni ni-menu" /></a>
 					</div>
 					<div className="nk-header-brand d-xl-none">

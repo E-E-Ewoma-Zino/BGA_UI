@@ -19,7 +19,7 @@ export default function _sidebar() {
 	}
 
 	return (
-		<div ref={sideRef} className="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
+		<div id="nk-sidebar" ref={sideRef} className="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
 			<div className="nk-sidebar-element nk-sidebar-head">
 				<div className="nk-sidebar-brand">
 					<a href={_route._admin_dashboard} className="logo-link nk-sidebar-logo">
