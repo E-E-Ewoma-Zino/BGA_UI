@@ -28,11 +28,11 @@ export default function _sidebar() {
 						<img className="logo-small logo-img logo-img-small" src={smallLogo} alt="logo-small" />
 					</a>
 				</div>
-				<div className="nk-menu-trigger me-n2">
+				<div onClick={() => handleMenu()} className="nk-menu-trigger me-n2">
 					<a href="#x" className="nk-nav-toggle nk-quick-nav-icon d-xl-none" data-target="sidebarMenu">
 						<em className="icon ni ni-arrow-left" />
 					</a>
-					<span onClick={() => handleMenu()} className="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex" data-target="sidebarMenu">
+					<span className="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex" data-target="sidebarMenu">
 						<em className="icon ni ni-menu" />
 					</span>
 				</div>
