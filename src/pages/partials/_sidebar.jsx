@@ -11,11 +11,18 @@ export default function _sidebar() {
 	const sideRef = useRef()
 
 	const handleMenu = ()=>{
-		if(sideRef.current.classList.contains('is-compact') === false){
-			sideRef.current.classList.add('is-compact')
-		}else{
-			sideRef.current.classList.remove('is-compact')
-		}
+		console.log('hey')
+		console.log(sideRef.current.classList.contains('is-compact'))
+		setTimeout(() => {
+			if(sideRef.current.classList.contains('is-compact') === false){
+				console.log('hey1')
+				sideRef.current.classList.add('is-compact')
+			}else{
+				console.log('hey2')
+				sideRef.current.classList.remove('is-compact')
+			}
+			
+		}, 500);
 	}
 
 	return (
@@ -28,7 +35,7 @@ export default function _sidebar() {
 						<img className="logo-small logo-img logo-img-small" src={smallLogo} alt="logo-small" />
 					</a>
 				</div>
-				<div onClick={() => handleMenu()} className="nk-menu-trigger me-n2">
+				<div  className="nk-menu-trigger me-n2">
 					<a href="#x" className="nk-nav-toggle nk-quick-nav-icon d-xl-none" data-target="sidebarMenu">
 						<em className="icon ni ni-arrow-left" />
 					</a>
