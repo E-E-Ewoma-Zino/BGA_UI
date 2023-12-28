@@ -68,7 +68,8 @@ useEffect(()=>{
   }, [])
 
 
-	const handleSubmit = async ()=>{
+	const handleSubmit = async (e)=>{
+		e.preventDefault()
 		console.log(groupedMenuForm)
 		if(groupedMenuForm.url === '') delete groupedMenuForm.url;
 		await createGroupMenu(groupedMenuForm) && fetchGroup()
@@ -91,7 +92,8 @@ useEffect(()=>{
 
 	
 	
-	const handleUpdateGroupedMenu = async ()=>{
+	const handleUpdateGroupedMenu = async (e)=>{
+		e.preventDefault()
 		console.log(editGroupedMenuForm)
 		const formData = {
 		  name: editGroupedMenuForm.name,
@@ -235,7 +237,7 @@ console.log(groupMenu)
 		
 		{showModal && (
 				<Modal handleClose={handleClose} showModal={showModal} >
-					<div className="modal-body modal-body-lg">
+					<form onSubmit={handleSubmit} className="modal-body modal-body-lg">
 						<h5 className="title">Create Group Menu</h5>
 						<div className="tab-content">
 							<div className="tab-pane active" id="personal" role="tabpanel">
@@ -270,7 +272,7 @@ console.log(groupMenu)
 										<div className="form-control-wrap ">
 											<div className="form-control-select">
 											<select value={groupedMenuForm.widget} onChange={(e)=>handleGroupedMenuWidget(e)} className="form-control" id="default-06">
-												<option hidden value=''> {widgetLoading ? 'Loading...' :'select an Agent'}</option>
+												<option hidden value=''> {widgetLoading ? 'Loading...' :'select a widget'}</option>
 												
 												{widgets?.map((widget, index) => (
 													<option key={index} value={widget._id}>
@@ -308,13 +310,13 @@ console.log(groupMenu)
 						<div className="col-12 mt-4">
 							<ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
 								<li>
-									<div
-										onClick={()=> handleSubmit()}
+									<button
+										// onClick={()=> handleSubmit()}
 										className="btn btn-lg btn-primary"
 									>
 										{ createGroupMenuLoading ? <Spinnar /> : 'Create Menu'}
 										
-									</div>
+									</button>
 								</li>
 								<li>
 									<div
@@ -327,14 +329,14 @@ console.log(groupMenu)
 							</ul>
 						</div>
 						{/* .tab-content */}
-					</div>
+					</form>
 				</Modal>
 		)}
 
 
 		{showEditModal && (
 				<Modal handleClose={handleClose} showModal={showEditModal} >
-					<div className="modal-body modal-body-lg">
+					<form onSubmit={handleUpdateGroupedMenu} className="modal-body modal-body-lg">
 						<h5 className="title">Edit Group Menu</h5>
 						<div className="tab-content">
 							<div className="tab-pane active" id="personal" role="tabpanel">
@@ -369,7 +371,7 @@ console.log(groupMenu)
 										<div className="form-control-wrap ">
 											<div className="form-control-select">
 											<select value={editGroupedMenuForm.widget} onChange={(e)=>handleEditGroupedMenuWidget(e)} className="form-control" id="default-06">
-												<option hidden value=''>  {widgetLoading ? 'Loading...' :'select an Agent'}</option>
+												<option hidden value=''>  {widgetLoading ? 'Loading...' :'select a widget'}</option>
 												
 												{widgets?.map((widget, index) => (
 													<option key={index} value={widget._id}>
@@ -406,13 +408,13 @@ console.log(groupMenu)
 						<div className="col-12 mt-4">
 							<ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
 								<li>
-									<div
-										onClick={()=> handleUpdateGroupedMenu()}
+									<button
+										// onClick={()=> handleUpdateGroupedMenu()}
 										className="btn btn-lg btn-primary"
 									>
 										{updateGroupMenuLoading? <Spinnar /> : 'Update Menu'}
 										
-									</div>
+									</button>
 								</li>
 								<li>
 									<div
@@ -425,7 +427,7 @@ console.log(groupMenu)
 							</ul>
 						</div>
 						{/* .tab-content */}
-					</div>
+					</form>
 				</Modal>
 		)}
 

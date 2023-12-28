@@ -76,7 +76,8 @@ useEffect(()=>{
 	// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-	const handleSubmit = async ()=>{
+	const handleSubmit = async (e)=>{
+		e.preventDefault()
 		console.log(menuForm)
 		const formData = {
 		  name: menuForm.name,
@@ -107,7 +108,8 @@ useEffect(()=>{
 
 	
 	
-	const handleUpdateMenu = async ()=>{
+	const handleUpdateMenu = async (e)=>{
+		e.preventDefault()
 		console.log(editMenuForm)
 		const formData = {
 		  name: editMenuForm.name,
@@ -277,7 +279,7 @@ useEffect(()=>{
 		
 		{showModal && (
 				<Modal handleClose={handleClose} showModal={showModal} >
-					<div className="modal-body modal-body-lg">
+					<form onSubmit={handleSubmit} className="modal-body modal-body-lg">
 						<h5 className="title">Create Menu</h5>
 						<div className="tab-content">
 							<div className="tab-pane active" id="personal" role="tabpanel">
@@ -312,7 +314,7 @@ useEffect(()=>{
 										<div className="form-control-wrap ">
 											<div className="form-control-select">
 											<select value={menuForm.parent} onChange={(e)=>handleMenuParent(e)} className="form-control" id="default-06">
-												<option hidden value=''>{groupMenuLoading ? 'Loading...' : 'select an Agent'}</option>
+												<option hidden value=''>{groupMenuLoading ? 'Loading...' : 'select a parent menu'}</option>
 												{groupMenu?.map((menu, index) => (
 													<option key={index} value={menu._id}>
 													{menu?.name}
@@ -349,13 +351,13 @@ useEffect(()=>{
 						<div className="col-12 mt-4">
 							<ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
 								<li>
-									<div
-										onClick={()=> handleSubmit()}
+									<button
+										// onClick={()=> handleSubmit()}
 										className="btn btn-lg btn-primary"
 									>
 										{createMenuLoading ? <Spinnar /> : 'Create Menu'}
 										
-									</div>
+									</button>
 								</li>
 								<li>
 									<div
@@ -368,14 +370,14 @@ useEffect(()=>{
 							</ul>
 						</div>
 						{/* .tab-content */}
-					</div>
+					</form>
 				</Modal>
 		)}
 
 
 		{showEditModal && (
 				<Modal handleClose={handleClose} showModal={showEditModal} >
-					<div className="modal-body modal-body-lg">
+					<form onSubmit={handleUpdateMenu} className="modal-body modal-body-lg">
 						<h5 className="title">Edit Menu</h5>
 						<div className="tab-content">
 							<div className="tab-pane active" id="personal" role="tabpanel">
@@ -411,7 +413,7 @@ useEffect(()=>{
 											<div className="form-control-select">
 												{console.log(editMenuForm)}
 											<select value={editMenuForm.parent} onChange={(e)=>handleEditMenuParent(e)} className="form-control" id="default-06">
-												<option hidden value=''> { groupMenuLoading ? 'Loading' : 'select an Agent'}</option>
+												<option hidden value=''> { groupMenuLoading ? 'Loading' : 'select a parent menu'}</option>
 												{groupMenu?.map((menu, index) => (
 													<option key={index} value={menu._id}>
 													{menu?.name}
@@ -447,13 +449,12 @@ useEffect(()=>{
 						<div className="col-12 mt-4">
 							<ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
 								<li>
-									<div
-										onClick={()=> handleUpdateMenu()}
+									<button
 										className="btn btn-lg btn-primary"
 									>
 										{updateMenuLoading ? <Spinnar /> : 'Update Menu'}
 										
-									</div>
+									</button>
 								</li>
 								<li>
 									<div
@@ -466,7 +467,7 @@ useEffect(()=>{
 							</ul>
 						</div>
 						{/* .tab-content */}
-					</div>
+					</form>
 				</Modal>
 		)}
 

@@ -44,7 +44,7 @@ export default function SignIn() {
 										<div className="nk-block-head-content">
 											<h5 className="nk-block-title">Sign-In</h5>
 											<div className="nk-block-des">
-												<p>Access the {process.env.REACT_APP_NAME} panel using your email and passcode.</p>
+												<p>Access the Gorilla Metrics panel using your email and passcode.</p>
 											</div>
 										</div>
 									</div>
@@ -89,7 +89,7 @@ export default function SignIn() {
 									{/* form */}
 								</div>
 								{/* .nk-block */}
-								<div className="nk-block nk-auth-footer">
+								<div className="nk-block nk-auth-footer d-none">
 									<div className="nk-block-between d-none d-md-flex">
 										<ul className="nav nav-sm">
 											<li className="nav-item">
@@ -136,7 +136,7 @@ export default function SignIn() {
 										{/* .nav */}
 									</div>
 									<div className="mt-3">
-										<p>© 2023 {process.env.REACT_APP_NAME}. All Rights Reserved.</p>
+										<p>© 2023 Gorilla Metrics. All Rights Reserved.</p>
 									</div>
 								</div>
 								{/* .nk-block */}

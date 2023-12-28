@@ -5,7 +5,7 @@ export default function _footer() {
 		<div className="nk-footer">
 			<div className="container-fluid">
 				<div className="nk-footer-wrap">
-					<div className="nk-footer-copyright"> © 2023 BGA. Template by <a href="#x" >BGA</a>
+					<div className="nk-footer-copyright"> © 2023 Gorilla Metrics. 
 					</div>
 					{/* <div className="nk-footer-links">
 						<ul className="nav nav-sm">
